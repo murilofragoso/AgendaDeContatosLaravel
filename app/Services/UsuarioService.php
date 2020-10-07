@@ -22,10 +22,9 @@ class UsuarioService implements UsuarioServiceInterface
             return response('Senhas não conferem!', 400);
         }
 
-        $emails = $this->usuarioRepository->buscarPorEmail($inputs["email"]);
-        dd($emails);
+        $emailsJaCadastrados = $this->usuarioRepository->buscarPorEmail($inputs["email"]);
 
-        if (!is_null($emails)){
+        if (count($emailsJaCadastrados)){
             return response('Email já cadastrado', 400);
         }
 
@@ -38,5 +37,10 @@ class UsuarioService implements UsuarioServiceInterface
         }
 
         return response('Erro ao cadastrar o usuário!', 500);
+    }
+
+    public function login($inputs)
+    {
+        return $this->usuarioRepository->login($inputs["email"], $inputs["senha"]);
     }
 }

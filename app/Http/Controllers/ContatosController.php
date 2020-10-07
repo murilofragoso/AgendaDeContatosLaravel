@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Usuario\LoginRequest;
-use App\Http\Requests\Usuario\StoreRequest;
+use App\Services\ContatoService;
 use Illuminate\Http\Request;
-use App\Services\UsuarioService;
-use App\User;
 use Illuminate\Support\Facades\Auth;
 
-class UsuariosController extends Controller
+class ContatosController extends Controller
 {
-    protected $usuarioService;
 
-    public function __construct(UsuarioService $usuarioService)
+    protected $contatoService;
+
+    public function __construct(ContatoService $contatoService)
     {
-        $this->usuarioService = $usuarioService;
+        $this->contatoService = $contatoService;
     }
 
     /**
@@ -25,7 +23,9 @@ class UsuariosController extends Controller
      */
     public function index()
     {
-        return view('usuarios.index');
+        $idUsuarioLogado = Auth::user()->id;
+        $contatos = $this->contatoService->index($idUsuarioLogado);
+        return view('contatos.index')->with('contatos', $contatos);
     }
 
     /**
@@ -35,7 +35,7 @@ class UsuariosController extends Controller
      */
     public function create()
     {
-        return view('usuarios.create');
+        return view('contatos.create');
     }
 
     /**
@@ -44,9 +44,9 @@ class UsuariosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request)
+    public function store(Request $request)
     {
-        return $this->usuarioService->store($request->toArray());
+        //
     }
 
     /**
@@ -92,17 +92,5 @@ class UsuariosController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function login(LoginRequest $request)
-    {
-        $usuarioId = $this->usuarioService->login($request->toArray());
-        if($usuarioId){
-            $teste = $this->create($request);
-
-            dd($teste);
-            return true;
-        }
-        return false;
     }
 }

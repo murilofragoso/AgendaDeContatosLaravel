@@ -18,7 +18,7 @@ class UsuarioRepository //implements UsuarioRepositoryInterface
     {
         $usu = new Usuario;
 
-        $usu->nome = $request["nome"];
+        $usu->nome  = $request["nome"];
         $usu->email = $request["email"];
         $usu->senha = $request["senha"];
 
@@ -27,6 +27,11 @@ class UsuarioRepository //implements UsuarioRepositoryInterface
 
     public function buscarPorEmail($email)
     {
-        return $this->usuario->where('email', $email);
+        return $this->usuario->where('email', $email)->get();
+    }
+
+    public function login($email, $senha)
+    {
+        return $this->usuario->where('email', $email)->where('senha', $senha)->first('id');
     }
 }

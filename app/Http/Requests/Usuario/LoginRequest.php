@@ -4,7 +4,7 @@ namespace App\Http\Requests\Usuario;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
 
     /**
@@ -25,10 +25,8 @@ class StoreRequest extends FormRequest
     public function filters()
     {
         return [
-            'nome'              => 'cast:string',
             'email'             => 'cast:string',
-            'senha'             => 'cast:string',
-            'repetirSenha'      => 'cast:string'
+            'senha'             => 'cast:string'
         ];
     }
 
@@ -41,8 +39,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'email'         => 'required',
-            'senha'         => 'required',
-            'repetirSenha'  => 'required'
+            'senha'         => 'required'
         ];
     }
 
@@ -55,9 +52,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'email.required'            => __('requests/usuario/register.email_required'),
-            'email.email'               => __('requests/usuario/register.email_email'),
-            'senha.required'            => __('requests/usuario/register.senha'),
-            'repetirSenha.required'     => __('requests/usuario/register.repetirSenha'),
+            'senha.required'            => __('requests/usuario/register.senha')
         ];
     }
 }
