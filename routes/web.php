@@ -19,5 +19,6 @@ Route::resource('usuarios', 'UsuariosController');
 
 Route::Post('usuarios/login', 'UsuariosController@login');
 
+Route::Post('usuarios/logout', 'UsuariosController@logout');
 
 Route::resource('contatos', 'ContatosController');

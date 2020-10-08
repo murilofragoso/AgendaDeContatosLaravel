@@ -104,4 +104,9 @@ class UsuariosController extends Controller
         }
         return response('Usuário ou senha incorretos', 400);
     }
+
+    public function logout(){
+        session()->flush();
+        return response('Logout efetuado com sucesso!');
+    }
 }

@@ -94,6 +94,16 @@
             $("#btnNovoContato").click(function(){
                 window.location.href = '/contatos/create';
             })
+
+            $("#btnLogOut").click(function(){
+                $.ajax({
+                    url: "http://127.0.0.1:8000/usuarios/logout",
+                    type: 'POST'
+                }).done(function(result){
+                    alert(result);
+                    window.location.href = '/usuarios';
+                })
+            });
         })
 
     </script>
