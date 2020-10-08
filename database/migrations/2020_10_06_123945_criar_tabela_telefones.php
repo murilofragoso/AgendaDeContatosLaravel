@@ -15,7 +15,7 @@ class CriarTabelaTelefones extends Migration
     {
         Schema::create('telefones', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('numero');
+            $table->string('numero');
             $table->integer('idContato')->unsigned();
             $table->foreign('idContato')->references('id')->on('contatos');
             $table->timestamps();

@@ -21,5 +21,3 @@ Route::Post('usuarios/login', 'UsuariosController@login');
 
 
 Route::resource('contatos', 'ContatosController');
-
-//Route::get('contatos/{idUsuarioLogado}', 'ContatosController@index');

@@ -90,6 +90,10 @@
                 })
                 $("#tableContatos tbody").html(linhasFiltradas);
             })
+
+            $("#btnNovoContato").click(function(){
+                window.location.href = '/contatos/create';
+            })
         })
 
     </script>

@@ -98,11 +98,10 @@ class UsuariosController extends Controller
     {
         $usuarioId = $this->usuarioService->login($request->toArray());
         if($usuarioId){
-            $teste = $this->create($request);
+            session(['idUsuarioLogado' => $usuarioId->id]);
 
-            dd($teste);
-            return true;
+            return response('Login efetuado com sucesso!');
         }
-        return false;
+        return response('Usuário ou senha incorretos', 400);
     }
 }

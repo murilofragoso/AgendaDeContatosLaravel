@@ -17,4 +17,16 @@ class ContatoRepositoryEloquent
     {
         return $this->contato->where('idUsuario', $idUsuarioLogado)->orderBy('nome')->get();
     }
+
+    public function store(array $request)
+    {
+        $cont = new Contato;
+
+        $cont->nome = $request["nome"];
+        $cont->idUsuario = $request["idUsuario"];
+
+        $cont-> save();
+
+        return $cont->id;
+    }
 }

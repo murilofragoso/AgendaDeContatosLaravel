@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Contato\StoreRequestContato;
 use App\Services\ContatoService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ContatosController extends Controller
 {
@@ -23,7 +23,7 @@ class ContatosController extends Controller
      */
     public function index()
     {
-        $idUsuarioLogado = Auth::user()->id;
+        $idUsuarioLogado = session('idUsuarioLogado');
         $contatos = $this->contatoService->index($idUsuarioLogado);
         return view('contatos.index')->with('contatos', $contatos);
     }
@@ -44,9 +44,11 @@ class ContatosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequestContato $request)
     {
-        //
+        $req = $request->toArray();
+        $req['idUsuario'] = session('idUsuarioLogado');
+        return $this->contatoService->store($req);
     }
 
     /**
