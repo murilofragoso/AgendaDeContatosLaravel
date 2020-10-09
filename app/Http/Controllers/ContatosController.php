@@ -59,7 +59,8 @@ class ContatosController extends Controller
      */
     public function show($id)
     {
-        //
+        $contato = $this->contatoService->show($id);
+        return view('contatos.create')->with('contato', $contato);;
     }
 
     /**
@@ -82,7 +83,9 @@ class ContatosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $req = $request->toArray();
+        $req["id"] = $id;
+        return $this->contatoService->update($req);
     }
 
     /**
@@ -93,6 +96,6 @@ class ContatosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->contatoService->destroy($id);
     }
 }

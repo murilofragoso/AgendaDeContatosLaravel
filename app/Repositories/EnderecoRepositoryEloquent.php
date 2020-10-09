@@ -30,4 +30,9 @@ class EnderecoRepositoryEloquent
 
         return $end->id;
     }
+
+    public function destroyByContato($idContato)
+    {
+        return $this->endereco->where('idContato', $idContato)->delete();
+    }
 }

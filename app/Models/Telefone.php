@@ -12,4 +12,9 @@ class Telefone extends Model
      * @var string
      */
     protected $table = 'telefones';
+
+    public function contato()
+    {
+        return $this->belongsTo(Contato::class, 'idContato', 'id');
+    }
 }

@@ -12,4 +12,9 @@ class Endereco extends Model
      * @var string
      */
     protected $table = 'enderecos';
+
+    public function contato()
+    {
+        return $this->belongsTo(Contato::class, 'idContato', 'id');
+    }
 }

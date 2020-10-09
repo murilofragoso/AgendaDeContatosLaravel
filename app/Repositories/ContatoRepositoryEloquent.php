@@ -20,13 +20,27 @@ class ContatoRepositoryEloquent
 
     public function store(array $request)
     {
-        $cont = new Contato;
+        if($request["id"]){
+            $cont = $this->contato->find($request["id"]);
+        }else{
+            $cont = new Contato;
+            $cont->idUsuario = $request["idUsuario"];
+        }
 
         $cont->nome = $request["nome"];
-        $cont->idUsuario = $request["idUsuario"];
 
         $cont-> save();
 
         return $cont->id;
+    }
+
+    public function destroy($idContato)
+    {
+        return $this->contato->where('id', $idContato)->delete();
+    }
+
+    public function get($idContato)
+    {
+        return $this->contato->find($idContato);
     }
 }

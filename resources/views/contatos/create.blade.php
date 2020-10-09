@@ -3,15 +3,19 @@
 @section('content')
 
     <div class="container my-4" id="containerCadastroContato">
-            <input type="hidden" id="hddnIdContato">
+            <input type="hidden" id="hddnIdContato" value="{{$contato->id ?? ''}}">
             <div class="content text-center" id="divTituloCadastroContato">
-                <h1>Novo Contato</h1>
+                @if($contato ?? '')
+                    <h1>Editar Contato</h1>
+                @else
+                    <h1>Novo Contato</h1>
+                @endif
             </div>
             <form id="formCadastroContato">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputNome">Nome</label>
-                        <input type="text" class="form-control" id="inputNome">
+                        <input type="text" class="form-control" id="inputNome" value="{{$contato->nome ?? ''}}">
                     </div>
                 </div>
                 <!--Telefone-->
@@ -30,7 +34,7 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <table class="table col-md-6" id="tableNovoContatoTelefones" style="display: none;">
+                    <table class="table col-md-6" id="tableNovoContatoTelefones" style="{{($contato->telefones ?? '') ? '' : 'display: none;'}}">
                         <thead>
                             <tr>
                                 <th class="col-4" scope="col">Telefones</th>
@@ -38,6 +42,14 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if ($contato ?? '' && count($contato->telefones ?? []) > 0)
+                                @foreach ($contato->telefones as $tel)
+                                    <tr>
+                                        <td>{{$tel->numero}}</td>
+                                        <td class='btnTableExcluir'>Excluir</td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -89,7 +101,7 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <table class="table" id="tableNovoContatoEnderecos" style="display: none;">
+                    <table class="table" id="tableNovoContatoEnderecos" style="{{($contato->enderecos ?? '') ? '' : 'display: none;'}}">
                         <thead>
                             <tr>
                                 <th scope="col">CEP</th>
@@ -103,6 +115,20 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if ($contato ?? '' && count($contato->enderecos ?? []) > 0)
+                                @foreach ($contato->enderecos as $end)
+                                    <tr>
+                                        <td class='tdCep'>{{$end->cep}}</td>
+                                        <td class='tdLogradouro'>{{$end->logradouro}}</td>
+                                        <td class='tdNumero'>{{$end->numero}}</td>
+                                        <td class='tdBairro'>{{$end->bairro}}</td>
+                                        <td class='tdComp'>{{$end->complemento}}</td>
+                                        <td class='tdCidade'>{{$end->cidade}}</td>
+                                        <td class='tdUf'>{{$end->uf}}</td>
+                                        <td class='btnTableExcluir'>Excluir</td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -287,12 +313,12 @@
                     enderecos: end
                 }
 
-                /*if($("#hddnIdContato").val())
-                    contato._id = $("#hddnIdContato").val()*/
+                if($("#hddnIdContato").val())
+                    contato.id = $("#hddnIdContato").val()
 
                 $.ajax({
-                    url: "http://127.0.0.1:8000/contatos",
-                    type: 'POST',//contato._id ? 'PUT': 'POST',
+                    url: "http://127.0.0.1:8000/contatos" + (contato.id ? "/" + contato.id : ''),
+                    type: contato.id ? 'PUT': 'POST',
                     data: contato
                 }).done(function(retorno){
                     limpaListaTelefonesEndereco();

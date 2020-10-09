@@ -12,4 +12,19 @@ class Contato extends Model
      * @var string
      */
     protected $table = 'contatos';
+
+    public function enderecos()
+    {
+        return $this->hasMany(Endereco::class, 'idContato', 'id');
+    }
+
+    public function telefones()
+    {
+        return $this->hasMany(Telefone::class, 'idContato', 'id');
+    }
+
+    public function getAll($idContato)
+    {
+        return $this->enderecos()->where('id', $idContato)->get();
+    }
 }

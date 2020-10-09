@@ -24,4 +24,9 @@ class TelefoneRepositoryEloquent
 
         return $tel->id;
     }
+
+    public function destroyByContato($idContato)
+    {
+        return $this->telefone->where('idContato', $idContato)->delete();
+    }
 }

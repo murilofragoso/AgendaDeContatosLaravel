@@ -104,6 +104,32 @@
                     window.location.href = '/usuarios';
                 })
             });
+
+            $("#tableContatos").on("click", ".btnTableExcluir", function(){
+                if(confirm("Deseja excluir esse contato?")){
+                    let linha = $(this).closest('tr');
+                    $.ajax({
+                        url: "http://127.0.0.1:8000/contatos/" + linha.attr("data-id"),
+                        type: 'delete'
+                    }).done(function(data){
+                        alert(data);
+                        location.reload();
+                    }).fail(function(jqXHR, textStatus, msg){
+                        alert("Erro ao excluir contato: " + msg)
+                    });
+                }
+            })
+
+            $("#tableContatos").on("click", ".linhaTabelaContatos", function(event){
+                // não abrir caso o local da linha clicado for o botão de excluir
+                if($(event.target).is(".btnTableExcluir")){
+                    event.stopPropagation();
+                    return;
+                }
+
+                let id = $(this).attr("data-id");
+                window.location.href = "/contatos/" + id;
+            })
         })
 
     </script>
