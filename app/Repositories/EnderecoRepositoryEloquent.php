@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Endereco;
+use App\Repositories\Contracts\EnderecoRepository;
 
-class EnderecoRepositoryEloquent
+class EnderecoRepositoryEloquent implements EnderecoRepository
 {
     protected $endereco;
 

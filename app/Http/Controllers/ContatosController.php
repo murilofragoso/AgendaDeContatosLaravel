@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Contato\StoreRequestContato;
-use App\Services\ContatoService;
+use App\Services\Contracts\ContatoServiceInterface;
 use Illuminate\Http\Request;
 
 class ContatosController extends Controller
@@ -11,7 +11,7 @@ class ContatosController extends Controller
 
     protected $contatoService;
 
-    public function __construct(ContatoService $contatoService)
+    public function __construct(ContatoServiceInterface $contatoService)
     {
         $this->contatoService = $contatoService;
     }
@@ -60,6 +60,9 @@ class ContatosController extends Controller
     public function show($id)
     {
         $contato = $this->contatoService->show($id);
+        if($contato->idUsuario != session('idUsuarioLogado')){
+            return abort(404);
+        }
         return view('contatos.create')->with('contato', $contato);;
     }
 

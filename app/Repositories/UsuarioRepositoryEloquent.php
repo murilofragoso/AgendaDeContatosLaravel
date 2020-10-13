@@ -3,9 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Usuario;
-//use App\Repositories\Contracts\UsuarioRepository as UsuarioRepositoryInterface;
+use App\Repositories\Contracts\UsuarioRepository;
 
-class UsuarioRepository //implements UsuarioRepositoryInterface
+class UsuarioRepositoryEloquent implements UsuarioRepository
 {
     protected $usuario;
 
@@ -20,7 +20,7 @@ class UsuarioRepository //implements UsuarioRepositoryInterface
 
         $usu->nome  = $request["nome"];
         $usu->email = $request["email"];
-        $usu->senha = $request["senha"];
+        $usu->senha = bcrypt($request["senha"]);
 
         return $usu->save();
     }
@@ -32,6 +32,8 @@ class UsuarioRepository //implements UsuarioRepositoryInterface
 
     public function login($email, $senha)
     {
-        return $this->usuario->where('email', $email)->where('senha', $senha)->first('id');
+        $senhaEmail = $this->usuario->where('email', $email)->first('senha');
+        $senhaCrypt = crypt($senha, $senhaEmail->senha);
+        return $this->usuario->where('senha', $senhaCrypt)->first('id');
     }
 }

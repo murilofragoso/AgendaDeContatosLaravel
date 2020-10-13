@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Telefone;
+use App\Repositories\Contracts\TelefoneRepository;
 
-class TelefoneRepositoryEloquent
+class TelefoneRepositoryEloquent implements TelefoneRepository
 {
     protected $telefone;
 

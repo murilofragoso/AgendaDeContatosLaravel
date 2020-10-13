@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Mail\WelcomeMail;
 use App\Models\Usuario;
-use App\Repositories\UsuarioRepository;
+use App\Repositories\Contracts\UsuarioRepository;
 use App\Services\Contracts\UsuarioServiceInterface;
+use Illuminate\Support\Facades\Mail;
 
 class UsuarioService implements UsuarioServiceInterface
 {
@@ -33,6 +35,7 @@ class UsuarioService implements UsuarioServiceInterface
             "email" => $inputs["email"],
             "senha" => $inputs["senha"]
         ])){
+            Mail::to($inputs["email"])->send(new WelcomeMail());
             return response('Usuário cadastrado com sucesso!');
         }
 

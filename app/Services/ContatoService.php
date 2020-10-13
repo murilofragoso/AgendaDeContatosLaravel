@@ -2,21 +2,21 @@
 
 namespace App\Services;
 
-use App\Models\Contato;
-use App\Repositories\ContatoRepositoryEloquent;
-use App\Repositories\EnderecoRepositoryEloquent;
-use App\Repositories\TelefoneRepositoryEloquent;
+use App\Repositories\Contracts\ContatoRepository;
+use App\Repositories\Contracts\EnderecoRepository;
+use App\Repositories\Contracts\TelefoneRepository;
+use App\Services\Contracts\ContatoServiceInterface;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class ContatoService
+class ContatoService implements ContatoServiceInterface
 {
     private $contatoRepository;
     private $telefoneRepository;
     private $enderecoRepository;
 
-    public function __construct(ContatoRepositoryEloquent $contatoRepository,
-    TelefoneRepositoryEloquent $telefoneRepository, EnderecoRepositoryEloquent $enderecoRepository)
+    public function __construct(ContatoRepository $contatoRepository,
+    TelefoneRepository $telefoneRepository, EnderecoRepository $enderecoRepository)
     {
         $this->contatoRepository = $contatoRepository;
         $this->telefoneRepository = $telefoneRepository;

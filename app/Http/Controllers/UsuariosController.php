@@ -4,16 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Usuario\LoginRequest;
 use App\Http\Requests\Usuario\StoreRequest;
+use App\Services\Contracts\UsuarioServiceInterface;
 use Illuminate\Http\Request;
-use App\Services\UsuarioService;
-use App\User;
-use Illuminate\Support\Facades\Auth;
 
 class UsuariosController extends Controller
 {
     protected $usuarioService;
 
-    public function __construct(UsuarioService $usuarioService)
+    public function __construct(UsuarioServiceInterface $usuarioService)
     {
         $this->usuarioService = $usuarioService;
     }

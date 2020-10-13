@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Contato;
+use App\Repositories\Contracts\ContatoRepository;
 
-class ContatoRepositoryEloquent
+class ContatoRepositoryEloquent implements ContatoRepository
 {
     protected $contato;
 
@@ -20,7 +21,7 @@ class ContatoRepositoryEloquent
 
     public function store(array $request)
     {
-        if($request["id"]){
+        if(array_key_exists("id", $request)){
             $cont = $this->contato->find($request["id"]);
         }else{
             $cont = new Contato;
