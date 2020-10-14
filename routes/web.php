@@ -21,4 +21,10 @@ Route::Post('usuarios/login', 'UsuariosController@login');
 
 Route::Post('usuarios/logout', 'UsuariosController@logout');
 
-Route::resource('contatos', 'ContatosController')->middleware('verifyLogin');
+Route::resource('contatos', 'ContatosController', [
+    'names' => [
+        'show' => 'contatos.show',
+        'update' => 'contatos.update',
+        'destroy' => 'contatos.destroy'
+    ]
+])->middleware('verifyLogin');
