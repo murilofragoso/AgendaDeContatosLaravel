@@ -60,7 +60,7 @@ class ContatoService implements ContatoServiceInterface
                 "logradouro"    => $end["logradouro"],
                 "numero"        => $end["numero"],
                 "bairro"        => $end["bairro"],
-                "complemento"   => $end["complemento"],
+                "complemento"   => $end["complemento"] ?? "",
                 "cidade"        => $end["cidade"],
                 "uf"            => $end["uf"],
                 "idContato"     => $idContato
