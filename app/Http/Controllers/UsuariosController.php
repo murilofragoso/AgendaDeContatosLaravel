@@ -55,7 +55,11 @@ class UsuariosController extends Controller
      */
     public function show($id)
     {
-        //
+        if($id != session('idUsuarioLogado')){
+            return abort(404);
+        }
+        $usuario = $this->usuarioService->show($id);
+        return view('usuarios.show')->with('usuario', $usuario);
     }
 
     /**
@@ -78,7 +82,9 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $req = $request->toArray();
+        $req["id"] = $id;
+        return $this->usuarioService->update($req);
     }
 
     /**

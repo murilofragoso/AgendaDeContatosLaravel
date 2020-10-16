@@ -25,6 +25,7 @@ class ContatosController extends Controller
     {
         $idUsuarioLogado = session('idUsuarioLogado');
         $contatos = $this->contatoService->index($idUsuarioLogado);
+        $contatos->idUsuarioLogado = $idUsuarioLogado;
         return view('contatos.index')->with('contatos', $contatos);
     }
 
@@ -63,7 +64,7 @@ class ContatosController extends Controller
         if($contato->idUsuario != session('idUsuarioLogado')){
             return abort(404);
         }
-        return view('contatos.create')->with('contato', $contato);;
+        return view('contatos.create')->with('contato', $contato);
     }
 
     /**

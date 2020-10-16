@@ -17,7 +17,7 @@
             <button type="submit" class="btn btn btn-primary btn-lg btn-block">Enviar</button>
         </form>
         <div class="content text-center" style="margin-top: 10px;">
-            <button type="button" class="btn btn btn-secondary btn-lg btn-block" id="btnCreateUsuario">Cadastre-se</button>
+            <button type="button" class="btn btn btn-dark btn-lg btn-block" id="btnCreateUsuario">Cadastre-se</button>
         </div>
     </div>
 

@@ -9,4 +9,6 @@ interface UsuarioRepository
     public function buscarPorEmail($email);
 
     public function login($email, $senha);
+
+    public function get($idUsuario);
 }

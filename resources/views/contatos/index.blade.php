@@ -2,18 +2,22 @@
 
 @section('content')
     <div class="container my-4" id="containerContatos">
+        <input type="hidden" value="{{$contatos->idUsuarioLogado}}" id="hddnUsuarioLogado">
         <div class="content text-center">
             <h1>Contatos</h1>
             <div class="btn-toolbar justify-content-between" role="toolbar">
-                <button type="button" class="btn btn-outline-danger" id="btnLogOut" style="margin-bottom: 10px;">Sair</button>
-                <button type="button" class="btn btn-outline-secondary" id="btnNovoContato" style="margin-bottom: 10px;">Novo Contato</button>
+                <div class="justify-content-between">
+                    <button type="button" class="btn btn-outline-danger" id="btnLogOut" style="margin-bottom: 10px;">Sair</button>
+                    <button type="button" class="btn btn-outline-dark" id="btnEditarPerfil" style="margin-bottom: 10px;">Editar Perfil</button>
+                </div>
+                <button type="button" class="btn btn-outline-dark" id="btnNovoContato" style="margin-bottom: 10px;">Novo Contato</button>
             </div>
         </div>
         <form id="formBuscaContatos">
             <div class="input-group mb-3">
                 <input type="search" class="form-control" aria-describedby="btnBuscaContato" list="datalistBuscaContato" id="inputBusca">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="btnBuscaContato">Buscar</button>
+                    <button class="btn btn-outline-dark" type="button" id="btnBuscaContato">Buscar</button>
                 </div>
                 </div>
                 <datalist id="datalistBuscaContato">
@@ -78,7 +82,7 @@
                     location.reload();
                 }
 
-                let contatos = @json($contatos)
+                let contatos = @json($contatos);
 
                 contatos.forEach(element =>{
                     if(element.nome.toUpperCase().indexOf(valorBusca) != -1)
@@ -130,6 +134,12 @@
                 let id = $(this).attr("data-id");
                 window.location.href = "/contatos/" + id;
             })
+
+            $("#btnEditarPerfil").click(function(){
+                let idUsuarioLogado = $("#hddnUsuarioLogado").val()
+                window.location.href = '/usuarios/' + idUsuarioLogado
+            })
+
         })
 
     </script>

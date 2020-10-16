@@ -25,7 +25,7 @@
                         <div class="input-group mb-3" aria-describedby="ajudaTelefone">
                             <input type="text" class="form-control" id="inputTelefone" >
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="addTelefone">Cadastrar telefone</button>
+                                <button class="btn btn-outline-dark" type="button" id="addTelefone">Cadastrar telefone</button>
                             </div>
                         </div>
                         <small id="ajudaTelefone" class="form-text text-muted">
@@ -60,7 +60,7 @@
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="inputCep">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="buscaCep">Buscar</button>
+                                <button class="btn btn-outline-dark" type="button" id="buscaCep">Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <button type="button" class="btn btn-outline-secondary" id="btnNovoEndereco" style="margin-bottom: 5px;">Cadastrar Endereço</button>
+                        <button type="button" class="btn btn-outline-dark" id="btnNovoEndereco" style="margin-bottom: 5px;">Cadastrar Endereço</button>
                     </div>
                 </div>
                 <div class="form-row">

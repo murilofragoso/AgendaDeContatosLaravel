@@ -18,6 +18,10 @@ class UsuarioRepositoryEloquent implements UsuarioRepository
     {
         $usu = new Usuario;
 
+        if(array_key_exists("id", $request)){
+            $usu = $this->get($request["id"]);
+        }
+
         $usu->nome  = $request["nome"];
         $usu->email = $request["email"];
         $usu->senha = bcrypt($request["senha"]);
@@ -35,5 +39,10 @@ class UsuarioRepositoryEloquent implements UsuarioRepository
         $senhaEmail = $this->usuario->where('email', $email)->first('senha');
         $senhaCrypt = crypt($senha, $senhaEmail->senha);
         return $this->usuario->where('senha', $senhaCrypt)->first('id');
+    }
+
+    public function get($idUsuario)
+    {
+        return $this->usuario->find($idUsuario);
     }
 }
