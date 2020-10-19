@@ -65,18 +65,20 @@ class UsuarioService implements UsuarioServiceInterface
             }
         };
 
+        $senhaAlterada = 0;
         if($inputs["senhaAtual"] && $inputs["novaSenha"]){
             if(!Hash::check($inputs["senhaAtual"], $usuario["senha"]))
                 return response('Senha atual incorreta!', 400);
-            else
-                $usuario["senha"] = $inputs["novaSenha"];
+
+            $senhaAlterada = 1;
         }
 
         if ($this->usuarioRepository->salvar([
-            "id"    => $inputs["id"],
-            "nome"  => $inputs["nome"],
-            "email" => $inputs["email"],
-            "senha" => $usuario["senha"]
+            "id"            => $inputs["id"],
+            "nome"          => $inputs["nome"],
+            "email"         => $inputs["email"],
+            "senha"         => $inputs["novaSenha"] ?? "",
+            "senhaAlterada" => $senhaAlterada
         ])){
             return response('Usuário Atualizado com sucesso!');
         }

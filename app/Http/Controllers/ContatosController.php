@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Contato\StoreRequestContato;
 use App\Services\Contracts\ContatoServiceInterface;
-use Illuminate\Http\Request;
 
 class ContatosController extends Controller
 {
@@ -85,7 +84,7 @@ class ContatosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreRequestContato $request, $id)
     {
         $req = $request->toArray();
         $req["id"] = $id;

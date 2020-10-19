@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Usuario\LoginRequest;
 use App\Http\Requests\Usuario\StoreRequest;
+use App\Http\Requests\Usuario\UpdateRequest;
 use App\Services\Contracts\UsuarioServiceInterface;
-use Illuminate\Http\Request;
 
 class UsuariosController extends Controller
 {
@@ -80,7 +80,7 @@ class UsuariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         $req = $request->toArray();
         $req["id"] = $id;

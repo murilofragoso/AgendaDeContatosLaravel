@@ -20,11 +20,15 @@ class UsuarioRepositoryEloquent implements UsuarioRepository
 
         if(array_key_exists("id", $request)){
             $usu = $this->get($request["id"]);
+
+            if($request["senhaAlterada"] == 1)
+                $usu->senha = bcrypt($request["senha"]);
+        }else {
+            $usu->senha = bcrypt($request["senha"]);
         }
 
         $usu->nome  = $request["nome"];
         $usu->email = $request["email"];
-        $usu->senha = bcrypt($request["senha"]);
 
         return $usu->save();
     }

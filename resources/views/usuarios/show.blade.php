@@ -58,7 +58,7 @@
                     data: usuario
                 }).done(function(response){
                     alert("Atualização efetuada com sucesso")
-                    //redirecionarLogin();
+                    window.location.href = '/contatos'
                 }).fail(function(jqXHR, textStatus, msg){
                     alert("Erro ao atualizar: " + jqXHR.responseText)
                 });
