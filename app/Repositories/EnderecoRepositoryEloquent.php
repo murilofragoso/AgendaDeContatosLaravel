@@ -16,7 +16,7 @@ class EnderecoRepositoryEloquent implements EnderecoRepository
 
     public function store(array $request)
     {
-        $end = new Endereco;
+        $end = new Endereco();
 
         $end->cep = $request["cep"];
         $end->logradouro = $request["logradouro"];

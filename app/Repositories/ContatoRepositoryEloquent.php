@@ -21,10 +21,11 @@ class ContatoRepositoryEloquent implements ContatoRepository
 
     public function store(array $request)
     {
-        if(array_key_exists("id", $request)){
+        $cont = new Contato();
+
+        if (array_key_exists("id", $request)) {
             $cont = $this->contato->find($request["id"]);
-        }else{
-            $cont = new Contato;
+        } else {
             $cont->idUsuario = $request["idUsuario"];
         }
 

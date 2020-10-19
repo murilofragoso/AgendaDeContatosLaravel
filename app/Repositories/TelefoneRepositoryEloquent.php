@@ -16,7 +16,7 @@ class TelefoneRepositoryEloquent implements TelefoneRepository
 
     public function store(array $request)
     {
-        $tel = new Telefone;
+        $tel = new Telefone();
 
         $tel->numero = $request["numero"];
         $tel->idContato = $request["idContato"];

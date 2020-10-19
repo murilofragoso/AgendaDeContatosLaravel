@@ -60,7 +60,7 @@ class ContatosController extends Controller
     public function show($id)
     {
         $contato = $this->contatoService->show($id);
-        if($contato->idUsuario != session('idUsuarioLogado')){
+        if ($contato->idUsuario != session('idUsuarioLogado')) {
             return abort(404);
         }
         return view('contatos.create')->with('contato', $contato);

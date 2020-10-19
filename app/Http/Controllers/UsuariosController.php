@@ -55,7 +55,7 @@ class UsuariosController extends Controller
      */
     public function show($id)
     {
-        if($id != session('idUsuarioLogado')){
+        if ($id != session('idUsuarioLogado')) {
             return abort(404);
         }
         $usuario = $this->usuarioService->show($id);
@@ -101,7 +101,7 @@ class UsuariosController extends Controller
     public function login(LoginRequest $request)
     {
         $usuarioId = $this->usuarioService->login($request->toArray());
-        if($usuarioId){
+        if ($usuarioId) {
             session(['idUsuarioLogado' => $usuarioId->id]);
 
             return response('Login efetuado com sucesso!');
@@ -109,7 +109,8 @@ class UsuariosController extends Controller
         return response('Usuário ou senha incorretos', 400);
     }
 
-    public function logout(){
+    public function logout()
+    {
         session()->flush();
         return response('Logout efetuado com sucesso!');
     }

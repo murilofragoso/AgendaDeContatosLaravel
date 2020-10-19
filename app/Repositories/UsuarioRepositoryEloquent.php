@@ -16,14 +16,15 @@ class UsuarioRepositoryEloquent implements UsuarioRepository
 
     public function salvar(array $request)
     {
-        $usu = new Usuario;
+        $usu = new Usuario();
 
-        if(array_key_exists("id", $request)){
+        if (array_key_exists("id", $request)) {
             $usu = $this->get($request["id"]);
 
-            if($request["senhaAlterada"] == 1)
+            if ($request["senhaAlterada"] == 1) {
                 $usu->senha = bcrypt($request["senha"]);
-        }else {
+            }
+        } else {
             $usu->senha = bcrypt($request["senha"]);
         }
 

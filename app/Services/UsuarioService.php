@@ -21,21 +21,25 @@ class UsuarioService implements UsuarioServiceInterface
     public function store($inputs)
     {
 
-        if ($inputs["senha"] != $inputs["repetirSenha"]){
+        if ($inputs["senha"] != $inputs["repetirSenha"]) {
             return response('Senhas não conferem!', 400);
         }
 
         $emailsJaCadastrados = $this->usuarioRepository->buscarPorEmail($inputs["email"]);
 
-        if (count($emailsJaCadastrados)){
+        if (count($emailsJaCadastrados)) {
             return response('Email já cadastrado', 400);
         }
 
-        if ($this->usuarioRepository->salvar([
-            "nome"  => $inputs["nome"],
-            "email" => $inputs["email"],
-            "senha" => $inputs["senha"]
-        ])){
+        if (
+            $this->usuarioRepository->salvar(
+                [
+                    "nome"  => $inputs["nome"],
+                    "email" => $inputs["email"],
+                    "senha" => $inputs["senha"]
+                ]
+            )
+        ) {
             Mail::to($inputs["email"])->send(new WelcomeMail());
             return response('Usuário cadastrado com sucesso!');
         }
@@ -57,29 +61,33 @@ class UsuarioService implements UsuarioServiceInterface
     {
         $usuario = $this->show($inputs["id"])->toArray();
 
-        if($usuario["email"] != $inputs["email"]){
+        if ($usuario["email"] != $inputs["email"]) {
             $emailsJaCadastrados = $this->usuarioRepository->buscarPorEmail($inputs["email"]);
 
-            if (count($emailsJaCadastrados)){
+            if (count($emailsJaCadastrados)) {
                 return response('Email já cadastrado', 400);
             }
         };
 
         $senhaAlterada = 0;
-        if($inputs["senhaAtual"] && $inputs["novaSenha"]){
-            if(!Hash::check($inputs["senhaAtual"], $usuario["senha"]))
+        if ($inputs["senhaAtual"] && $inputs["novaSenha"]) {
+            if (!Hash::check($inputs["senhaAtual"], $usuario["senha"]))
                 return response('Senha atual incorreta!', 400);
 
             $senhaAlterada = 1;
         }
 
-        if ($this->usuarioRepository->salvar([
-            "id"            => $inputs["id"],
-            "nome"          => $inputs["nome"],
-            "email"         => $inputs["email"],
-            "senha"         => $inputs["novaSenha"] ?? "",
-            "senhaAlterada" => $senhaAlterada
-        ])){
+        if (
+            $this->usuarioRepository->salvar(
+                [
+                    "id"            => $inputs["id"],
+                    "nome"          => $inputs["nome"],
+                    "email"         => $inputs["email"],
+                    "senha"         => $inputs["novaSenha"] ?? "",
+                    "senhaAlterada" => $senhaAlterada
+                ]
+            )
+        ) {
             return response('Usuário Atualizado com sucesso!');
         }
 

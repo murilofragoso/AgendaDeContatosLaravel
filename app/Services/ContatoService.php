@@ -15,9 +15,11 @@ class ContatoService implements ContatoServiceInterface
     private $telefoneRepository;
     private $enderecoRepository;
 
-    public function __construct(ContatoRepository $contatoRepository,
-    TelefoneRepository $telefoneRepository, EnderecoRepository $enderecoRepository)
-    {
+    public function __construct(
+        ContatoRepository $contatoRepository,
+        TelefoneRepository $telefoneRepository,
+        EnderecoRepository $enderecoRepository
+    ) {
         $this->contatoRepository = $contatoRepository;
         $this->telefoneRepository = $telefoneRepository;
         $this->enderecoRepository = $enderecoRepository;
@@ -37,36 +39,38 @@ class ContatoService implements ContatoServiceInterface
             "idUsuario" => $inputs["idUsuario"]
         ]);
 
-        if (!$idContato){
+        if (!$idContato) {
             DB::rollback();
             return response('Erro ao cadastrar contato', 500);
         };
 
-        foreach ($inputs["telefones"] as $tel){
+        foreach ($inputs["telefones"] as $tel) {
             $idTel = $this->telefoneRepository->store([
                 "numero"    => $tel["numero"],
                 "idContato" => $idContato
             ]);
 
-            if (!$idTel){
+            if (!$idTel) {
                 DB::rollback();
                 return response('Erro ao cadastrar telefone' + $tel->numero, 500);
             };
         };
 
-        foreach ($inputs["enderecos"] as $end){
-            $idEnd = $this->enderecoRepository->store([
-                "cep"           => $end["cep"],
-                "logradouro"    => $end["logradouro"],
-                "numero"        => $end["numero"],
-                "bairro"        => $end["bairro"],
-                "complemento"   => $end["complemento"] ?? "",
-                "cidade"        => $end["cidade"],
-                "uf"            => $end["uf"],
-                "idContato"     => $idContato
-            ]);
+        foreach ($inputs["enderecos"] as $end) {
+            $idEnd = $this->enderecoRepository->store(
+                [
+                    "cep"           => $end["cep"],
+                    "logradouro"    => $end["logradouro"],
+                    "numero"        => $end["numero"],
+                    "bairro"        => $end["bairro"],
+                    "complemento"   => $end["complemento"] ?? "",
+                    "cidade"        => $end["cidade"],
+                    "uf"            => $end["uf"],
+                    "idContato"     => $idContato
+                ]
+            );
 
-            if (!$idEnd){
+            if (!$idEnd) {
                 DB::rollback();
                 return response('Erro ao cadastrar endereco', 500);
             };
@@ -80,15 +84,13 @@ class ContatoService implements ContatoServiceInterface
     public function destroy($idContato)
     {
         DB::beginTransaction();
-        try{
-
+        try {
             $this->telefoneRepository->destroyByContato($idContato);
 
             $this->enderecoRepository->destroyByContato($idContato);
 
             $this->contatoRepository->destroy($idContato);
-
-        }catch(Exception $error){
+        } catch (Exception $error) {
             DB::rollback();
             return response('Erro ao excluir contato! ' + $error->getMessage(), 500);
         }
@@ -107,32 +109,36 @@ class ContatoService implements ContatoServiceInterface
     {
         $idContato = $inputs["id"];
 
-        if(!$idContato)
+        if (!$idContato) {
             return response('ID não encontrado!', 500);
+        }
 
         DB::beginTransaction();
-        try{
-
-            $this->contatoRepository->store([
-                "nome"      => $inputs["nome"],
-                "id"        => $idContato
-            ]);
+        try {
+            $this->contatoRepository->store(
+                [
+                    "nome"      => $inputs["nome"],
+                    "id"        => $idContato
+                ]
+            );
 
             $this->telefoneRepository->destroyByContato($idContato);
-            foreach ($inputs["telefones"] as $tel){
-                $idTel = $this->telefoneRepository->store([
-                    "numero"    => $tel["numero"],
-                    "idContato" => $idContato
-                ]);
+            foreach ($inputs["telefones"] as $tel) {
+                $idTel = $this->telefoneRepository->store(
+                    [
+                        "numero"    => $tel["numero"],
+                        "idContato" => $idContato
+                    ]
+                );
 
-                if (!$idTel){
+                if (!$idTel) {
                     DB::rollback();
                     return response('Erro ao atualizar telefone' + $tel->numero, 500);
                 };
             };
 
             $this->enderecoRepository->destroyByContato($idContato);
-            foreach ($inputs["enderecos"] as $end){
+            foreach ($inputs["enderecos"] as $end) {
                 $idEnd = $this->enderecoRepository->store([
                     "cep"           => $end["cep"],
                     "logradouro"    => $end["logradouro"],
@@ -144,13 +150,13 @@ class ContatoService implements ContatoServiceInterface
                     "idContato"     => $idContato
                 ]);
 
-                if (!$idEnd){
+                if (!$idEnd) {
                     DB::rollback();
                     return response('Erro ao atualizar endereco', 500);
                 };
             };
 
-        }catch(Exception $error){
+        } catch (Exception $error) {
             DB::rollback();
             return response('Erro ao atualizar contato! ' + $error->getMessage(), 500);
         }

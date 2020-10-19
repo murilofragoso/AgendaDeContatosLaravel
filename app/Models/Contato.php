@@ -22,9 +22,4 @@ class Contato extends Model
     {
         return $this->hasMany(Telefone::class, 'idContato', 'id');
     }
-
-    public function getAll($idContato)
-    {
-        return $this->enderecos()->where('id', $idContato)->get();
-    }
 }

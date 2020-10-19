@@ -12,4 +12,9 @@ class Usuario extends Model
      * @var string
      */
     protected $table = 'usuarios';
+
+    public function contatos()
+    {
+        return $this->hasMany(Contato::class, 'idUsuario', 'id');
+    }
 }
