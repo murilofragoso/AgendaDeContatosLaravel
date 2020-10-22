@@ -12,10 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return redirect('usuarios');
+})->middleware('verifyLoggedIn');
 
-Route::resource('usuarios', 'UsuariosController');
+Route::resource('usuarios', 'UsuariosController')->middleware('verifyLoggedIn');
 
 Route::Post('usuarios/login', 'UsuariosController@login');
 

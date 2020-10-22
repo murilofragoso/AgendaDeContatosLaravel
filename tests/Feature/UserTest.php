@@ -17,8 +17,9 @@ class UserTest extends TestCase
         $this->get('/usuarios/create')->assertStatus(200);
     }
 
-    public function testStore()
+    public function testUserStoreReturnSuccess()
     {
+        // Testando se a request store retorna sucesso
         $user = [
             "nome" => "teste",
             "email" => "teste@teste.com",
@@ -26,7 +27,11 @@ class UserTest extends TestCase
             "repetirSenha" => "senha"
         ];
         $this->post('/usuarios', $user)->assertStatus(200);
+    }
 
+    public function testUserStoreReturnErrorOnPasswordDontMatch()
+    {
+        // Testando se a request store retorna erro caso as senhas não coincidam
         $usuarioSenhaNaoConfere = [
             "nome" => "teste",
             "email" => "teste@teste.com",
@@ -34,12 +39,26 @@ class UserTest extends TestCase
             "repetirSenha" => "senhaNaoConfere"
         ];
         $this->post('/usuarios', $usuarioSenhaNaoConfere)->assertStatus(400);
+    }
 
-        $usuarioEmailJaCadastrado = [
+    public function testUserStoreReturnErrorOnEmailAlreadyRegistered()
+    {
+        // Testando se a request store retorna erro caso o email ja esteja registrado
+        // Cadastrando usuario com o email "teste@teste.com"
+        $user = [
             "nome" => "teste",
             "email" => "teste@teste.com",
             "senha" => "senha",
             "repetirSenha" => "senha"
+        ];
+        $this->post('/usuarios', $user);
+
+        // Cadastrando usuario com o mesmo email "teste@teste.com"
+        $usuarioEmailJaCadastrado = [
+            "nome" => "testeEmailJaCadastrado",
+            "email" => "teste@teste.com",
+            "senha" => "senhaEmailJaCadastrado",
+            "repetirSenha" => "senhaEmailJaCadastrado"
         ];
         $this->post('/usuarios', $usuarioEmailJaCadastrado)->assertStatus(400);
     }

@@ -27,6 +27,7 @@ class ContatoService implements ContatoServiceInterface
 
     public function index($idUsuarioLogado)
     {
+        // Buscando contatos de um usuário
         return $this->contatoRepository->buscar($idUsuarioLogado);
     }
 
@@ -34,6 +35,7 @@ class ContatoService implements ContatoServiceInterface
     {
         DB::beginTransaction();
 
+        // Criando contato e salvando seu ID
         $idContato = $this->contatoRepository->store([
             "nome"      => $inputs["nome"],
             "idUsuario" => $inputs["idUsuario"]
@@ -44,6 +46,7 @@ class ContatoService implements ContatoServiceInterface
             return response('Erro ao cadastrar contato', 500);
         };
 
+        // Salvando telefones deste contato
         foreach ($inputs["telefones"] as $tel) {
             $idTel = $this->telefoneRepository->store([
                 "numero"    => $tel["numero"],
@@ -56,6 +59,7 @@ class ContatoService implements ContatoServiceInterface
             };
         };
 
+        // Salvando enderecos deste contato
         foreach ($inputs["enderecos"] as $end) {
             $idEnd = $this->enderecoRepository->store(
                 [
@@ -85,10 +89,13 @@ class ContatoService implements ContatoServiceInterface
     {
         DB::beginTransaction();
         try {
+            // Deletando telefones do contato
             $this->telefoneRepository->destroyByContato($idContato);
 
+            // Deletando enderecos do contato
             $this->enderecoRepository->destroyByContato($idContato);
 
+            // Deletando contato
             $this->contatoRepository->destroy($idContato);
         } catch (Exception $error) {
             DB::rollback();
@@ -102,6 +109,7 @@ class ContatoService implements ContatoServiceInterface
 
     public function show($idContato)
     {
+        // Buscando contato especifico
         return $this->contatoRepository->get($idContato);
     }
 
@@ -115,6 +123,7 @@ class ContatoService implements ContatoServiceInterface
 
         DB::beginTransaction();
         try {
+            // Atualizando contato
             $this->contatoRepository->store(
                 [
                     "nome"      => $inputs["nome"],
@@ -122,6 +131,7 @@ class ContatoService implements ContatoServiceInterface
                 ]
             );
 
+            // Deletando telefones deste contato e adicionando os telefones que vieram
             $this->telefoneRepository->destroyByContato($idContato);
             foreach ($inputs["telefones"] as $tel) {
                 $idTel = $this->telefoneRepository->store(
@@ -137,6 +147,7 @@ class ContatoService implements ContatoServiceInterface
                 };
             };
 
+            // Deletando enderecos deste contato e adicionando os enderecos que vieram
             $this->enderecoRepository->destroyByContato($idContato);
             foreach ($inputs["enderecos"] as $end) {
                 $idEnd = $this->enderecoRepository->store([

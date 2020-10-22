@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class UsuarioTest extends TestCase
 {
-
     use DatabaseTransactions;
 
     private $usuarioService;
@@ -20,8 +19,9 @@ class UsuarioTest extends TestCase
         $this->usuarioService = app(UsuarioServiceInterface::class);
     }
 
-    public function testStore()
+    public function testUserStoreReturnSuccess()
     {
+        // Testando se o método store do service retorna sucesso (código 200)
         $usuario = [
             "nome" => "teste",
             "email" => "testEmailUsuario2541536@teste.com",
@@ -32,8 +32,9 @@ class UsuarioTest extends TestCase
         $this->assertTrue($request->status() == 200);
     }
 
-    public function testLogin()
+    public function testUserLoginReturnId()
     {
+        // Testando se o método login do service retorna o ID do usuário após um login com sucesso
         $senha = bcrypt('teste123');
         $usuario = factory(Usuario::class)->create(["senha" => $senha])->toArray();
         $usuario["senha"] = 'teste123';

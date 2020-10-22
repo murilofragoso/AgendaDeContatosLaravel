@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class VerifyLogin
+class VerifyLoggedIn
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,8 @@ class VerifyLogin
      */
     public function handle($request, Closure $next)
     {
-        if (!session('idUsuarioLogado')) {
-            return redirect('usuarios');
+        if (session('idUsuarioLogado')) {
+            return redirect('contatos');
         }
         return $next($request);
     }
