@@ -29,7 +29,7 @@ class UsuarioTest extends TestCase
             "repetirSenha" => "teste123"
         ];
         $request = $this->usuarioService->store($usuario);
-        $this->assertTrue($request->status() == 200);
+        $this->assertTrue($request->statusCode == 200);
     }
 
     public function testUserLoginReturnId()
@@ -39,6 +39,6 @@ class UsuarioTest extends TestCase
         $usuario = factory(Usuario::class)->create(["senha" => $senha])->toArray();
         $usuario["senha"] = 'teste123';
         $request = $this->usuarioService->login($usuario);
-        $this->assertTrue($request->id == $usuario["id"]);
+        $this->assertTrue($request->data->id == $usuario["id"]);
     }
 }

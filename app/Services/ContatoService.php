@@ -6,6 +6,7 @@ use App\Repositories\Contracts\ContatoRepository;
 use App\Repositories\Contracts\EnderecoRepository;
 use App\Repositories\Contracts\TelefoneRepository;
 use App\Services\Contracts\ContatoServiceInterface;
+use App\Services\Responses\ServiceResponse;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -28,7 +29,8 @@ class ContatoService implements ContatoServiceInterface
     public function index($idUsuarioLogado)
     {
         // Buscando contatos de um usuário
-        return $this->contatoRepository->buscar($idUsuarioLogado);
+        $response = $this->contatoRepository->buscar($idUsuarioLogado);
+        return new ServiceResponse('Busca efetuada com sucesso', 200, $response);
     }
 
     public function store($inputs)
@@ -43,7 +45,7 @@ class ContatoService implements ContatoServiceInterface
 
         if (!$idContato) {
             DB::rollback();
-            return response('Erro ao cadastrar contato', 500);
+            return new ServiceResponse('Erro ao cadastrar contato', 500);
         };
 
         // Salvando telefones deste contato
@@ -55,7 +57,7 @@ class ContatoService implements ContatoServiceInterface
 
             if (!$idTel) {
                 DB::rollback();
-                return response('Erro ao cadastrar telefone' + $tel->numero, 500);
+                return new ServiceResponse('Erro ao cadastrar telefone' + $tel->numero, 500);
             };
         };
 
@@ -76,13 +78,13 @@ class ContatoService implements ContatoServiceInterface
 
             if (!$idEnd) {
                 DB::rollback();
-                return response('Erro ao cadastrar endereco', 500);
+                return new ServiceResponse('Erro ao cadastrar endereco', 500);
             };
         };
 
         DB::commit();
 
-        return response('Contato Cadastrado com sucesso!');
+        return new ServiceResponse('Contato Cadastrado com sucesso!');
     }
 
     public function destroy($idContato)
@@ -99,26 +101,28 @@ class ContatoService implements ContatoServiceInterface
             $this->contatoRepository->destroy($idContato);
         } catch (Exception $error) {
             DB::rollback();
-            return response('Erro ao excluir contato! ' + $error->getMessage(), 500);
+            return new ServiceResponse('Erro ao excluir contato! ' + $error->getMessage(), 500);
         }
 
         DB::commit();
 
-        return response('Contato Excluido com sucesso!');
+        return new ServiceResponse('Contato Excluido com sucesso!');
     }
 
     public function show($idContato)
     {
         // Buscando contato especifico
-        return $this->contatoRepository->get($idContato);
+        $response = $this->contatoRepository->get($idContato);
+        return new ServiceResponse('Busca efetuada com sucesso', 200, $response);
     }
 
     public function update($inputs)
     {
+
         $idContato = $inputs["id"];
 
         if (!$idContato) {
-            return response('ID não encontrado!', 500);
+            return new ServiceResponse('ID não encontrado!', 500);
         }
 
         DB::beginTransaction();
@@ -143,7 +147,7 @@ class ContatoService implements ContatoServiceInterface
 
                 if (!$idTel) {
                     DB::rollback();
-                    return response('Erro ao atualizar telefone' + $tel->numero, 500);
+                    return new ServiceResponse('Erro ao atualizar telefone' + $tel->numero, 500);
                 };
             };
 
@@ -155,7 +159,7 @@ class ContatoService implements ContatoServiceInterface
                     "logradouro"    => $end["logradouro"],
                     "numero"        => $end["numero"],
                     "bairro"        => $end["bairro"],
-                    "complemento"   => $end["complemento"],
+                    "complemento"   => $end["complemento"] ?? "",
                     "cidade"        => $end["cidade"],
                     "uf"            => $end["uf"],
                     "idContato"     => $idContato
@@ -163,17 +167,16 @@ class ContatoService implements ContatoServiceInterface
 
                 if (!$idEnd) {
                     DB::rollback();
-                    return response('Erro ao atualizar endereco', 500);
+                    return new ServiceResponse('Erro ao atualizar endereco', 500);
                 };
             };
-
         } catch (Exception $error) {
             DB::rollback();
-            return response('Erro ao atualizar contato! ' + $error->getMessage(), 500);
+            return new ServiceResponse('Erro ao atualizar contato! ' + $error->getMessage(), 500);
         }
 
         DB::commit();
 
-        return response('Contato Atualizado com sucesso!');
+        return new ServiceResponse('Contato Atualizado com sucesso!');
     }
 }

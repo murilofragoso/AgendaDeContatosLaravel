@@ -15,7 +15,9 @@ Route::get('/', function () {
     return redirect('usuarios');
 })->middleware('verifyLoggedIn');
 
-Route::resource('usuarios', 'UsuariosController')->middleware('verifyLoggedIn');
+Route::resource('usuarios', 'UsuariosController')->only(['index', 'create'])->middleware('verifyLoggedIn');
+
+Route::resource('usuarios', 'UsuariosController')->except(['index', 'create']);
 
 Route::Post('usuarios/login', 'UsuariosController@login');
 

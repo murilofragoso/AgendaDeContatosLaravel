@@ -44,7 +44,8 @@ class UsuariosController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        return $this->usuarioService->store($request->toArray());
+        $response = $this->usuarioService->store($request->toArray());
+        return response($response->message, $response->statusCode);
     }
 
     /**
@@ -58,8 +59,8 @@ class UsuariosController extends Controller
         if ($id != session('idUsuarioLogado')) {
             return abort(404);
         }
-        $usuario = $this->usuarioService->show($id);
-        return view('usuarios.show')->with('usuario', $usuario);
+        $response = $this->usuarioService->show($id);
+        return view('usuarios.show')->with('usuario', $response->data);
     }
 
     /**
@@ -84,7 +85,8 @@ class UsuariosController extends Controller
     {
         $req = $request->toArray();
         $req["id"] = $id;
-        return $this->usuarioService->update($req);
+        $response = $this->usuarioService->update($req);
+        return response($response->message, $response->statusCode);
     }
 
     /**
@@ -100,13 +102,11 @@ class UsuariosController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $usuarioId = $this->usuarioService->login($request->toArray());
-        if ($usuarioId) {
-            session(['idUsuarioLogado' => $usuarioId->id]);
-
-            return response('Login efetuado com sucesso!');
+        $response = $this->usuarioService->login($request->toArray());
+        if ($response->statusCode = 200) {
+            session(['idUsuarioLogado' => $response->data->id]);
         }
-        return response('Usuário ou senha incorretos', 400);
+        return response($response->message, $response->statusCode);
     }
 
     public function logout()

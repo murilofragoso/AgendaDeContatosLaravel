@@ -23,9 +23,9 @@ class ContatosController extends Controller
     public function index()
     {
         $idUsuarioLogado = session('idUsuarioLogado');
-        $contatos = $this->contatoService->index($idUsuarioLogado);
-        $contatos->idUsuarioLogado = $idUsuarioLogado;
-        return view('contatos.index')->with('contatos', $contatos);
+        $response = $this->contatoService->index($idUsuarioLogado);
+        $response->data->idUsuarioLogado = $idUsuarioLogado;
+        return view('contatos.index')->with('contatos', $response->data);
     }
 
     /**
@@ -48,7 +48,8 @@ class ContatosController extends Controller
     {
         $req = $request->toArray();
         $req['idUsuario'] = session('idUsuarioLogado');
-        return $this->contatoService->store($req);
+        $response = $this->contatoService->store($req);
+        return response($response->message, $response->statusCode);
     }
 
     /**
@@ -59,11 +60,11 @@ class ContatosController extends Controller
      */
     public function show($id)
     {
-        $contato = $this->contatoService->show($id);
-        if ($contato->idUsuario != session('idUsuarioLogado')) {
+        $response = $this->contatoService->show($id);
+        if ($response->data->idUsuario != session('idUsuarioLogado')) {
             return abort(404);
         }
-        return view('contatos.create')->with('contato', $contato);
+        return view('contatos.create')->with('contato', $response->data);
     }
 
     /**
@@ -88,7 +89,8 @@ class ContatosController extends Controller
     {
         $req = $request->toArray();
         $req["id"] = $id;
-        return $this->contatoService->update($req);
+        $response = $this->contatoService->update($req);
+        return response($response->message, $response->statusCode);
     }
 
     /**
@@ -99,6 +101,7 @@ class ContatosController extends Controller
      */
     public function destroy($id)
     {
-        return $this->contatoService->destroy($id);
+        $response = $this->contatoService->destroy($id);
+        return response($response->message, $response->statusCode);
     }
 }

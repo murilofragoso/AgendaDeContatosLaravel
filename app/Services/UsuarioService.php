@@ -6,6 +6,7 @@ use App\Mail\WelcomeMail;
 use App\Models\Usuario;
 use App\Repositories\Contracts\UsuarioRepository;
 use App\Services\Contracts\UsuarioServiceInterface;
+use App\Services\Responses\ServiceResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -23,7 +24,7 @@ class UsuarioService implements UsuarioServiceInterface
 
         // Validando senha
         if ($inputs["senha"] != $inputs["repetirSenha"]) {
-            return response('Senhas não conferem!', 400);
+            return new ServiceResponse('Senhas não conferem!', 400);
         }
 
         // Buscando emails cadastrados com este e-mail
@@ -31,7 +32,7 @@ class UsuarioService implements UsuarioServiceInterface
 
         // Verificando se existem emails ja cadastrados com este e-mail
         if (count($emailsJaCadastrados)) {
-            return response('Email já cadastrado', 400);
+            return new ServiceResponse('Email já cadastrado', 400);
         }
 
         if (
@@ -46,22 +47,32 @@ class UsuarioService implements UsuarioServiceInterface
         ) {
             // Enviando e-mail de boas vindas
             Mail::to($inputs["email"])->send(new WelcomeMail());
-            return response('Usuário cadastrado com sucesso!');
+            return new ServiceResponse('Usuário cadastrado com sucesso!');
         }
 
-        return response('Erro ao cadastrar o usuário!', 500);
+        return new ServiceResponse('Erro ao cadastrar o usuário!', 500);
     }
 
     public function login($inputs)
     {
         // Buscando ID do usuário pelo e-mail e senha para validar login
-        return $this->usuarioRepository->login($inputs["email"], $inputs["senha"]);
+        $response = $this->usuarioRepository->login($inputs["email"], $inputs["senha"]);
+        return new ServiceResponse(
+            $response
+                ? 'Login efetuado com sucesso'
+                : 'Usuário ou senha incorretos',
+            $response
+                ? 200
+                : 404,
+            $response
+        );
     }
 
     public function show($idUsuario)
     {
         // Buscando usuário
-        return $this->usuarioRepository->get($idUsuario);
+        $response = $this->usuarioRepository->get($idUsuario);
+        return new ServiceResponse('Busca efetuada com sucesso', 200, $response);
     }
 
     public function update($inputs)
@@ -74,7 +85,7 @@ class UsuarioService implements UsuarioServiceInterface
             $emailsJaCadastrados = $this->usuarioRepository->buscarPorEmail($inputs["email"]);
 
             if (count($emailsJaCadastrados)) {
-                return response('Email já cadastrado', 400);
+                return new ServiceResponse('Email já cadastrado', 400);
             }
         };
 
@@ -82,7 +93,7 @@ class UsuarioService implements UsuarioServiceInterface
         $senhaAlterada = 0;
         if ($inputs["senhaAtual"] && $inputs["novaSenha"]) {
             if (!Hash::check($inputs["senhaAtual"], $usuario["senha"]))
-                return response('Senha atual incorreta!', 400);
+                return new ServiceResponse('Senha atual incorreta!', 400);
 
             $senhaAlterada = 1;
         }
@@ -99,9 +110,9 @@ class UsuarioService implements UsuarioServiceInterface
                 ]
             )
         ) {
-            return response('Usuário Atualizado com sucesso!');
+            return new ServiceResponse('Usuário Atualizado com sucesso!');
         }
 
-        return response('Erro ao atualizar o usuário!', 500);
+        return new ServiceResponse('Erro ao atualizar o usuário!', 500);
     }
 }

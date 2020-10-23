@@ -55,21 +55,21 @@ class ContatoTest extends TestCase
     {
         // Testando se o método index do service retorna o numero correto de contatos e o contato correto
         $request = $this->contatoService->index($this->contato["idUsuario"]);
-        $this->assertTrue(count($request) == 1);
-        $this->assertTrue($request[0]["id"] == $this->contato["id"]);
+        $this->assertTrue(count($request->data) == 1);
+        $this->assertTrue($request->data[0]["id"] == $this->contato["id"]);
     }
 
     public function testContactStoreReturnSuccess()
     {
         // Testando se o método store do service retorna sucesso
         $request = $this->contatoService->store($this->contatoManual);
-        $this->assertTrue($request->status() == 200);
+        $this->assertTrue($request->statusCode == 200);
     }
 
     public function testContactShowReturnRightContact()
     {
         // Testando se o método show do service retorna contato correto com os dados corretos
-        $request = $this->contatoService->show($this->contato["id"])->toArray();
+        $request = $this->contatoService->show($this->contato["id"])->data->toArray();
         $this->assertTrue($request["id"] == $this->contato["id"]);
         $this->assertTrue(array_key_exists("nome", $request));
     }
@@ -79,16 +79,20 @@ class ContatoTest extends TestCase
         // Testando se o método update do service retorna sucesso
         $this->contatoManual["id"] = $this->contato["id"];
         $request = $this->contatoService->update($this->contatoManual);
-        $this->assertTrue($request->status() == 200);
+        $this->assertTrue($request->statusCode == 200);
+    }
 
+    public function testContactUpdateReturnErrorWithoutId()
+    {
+        // Testando se o método update do service retorna erro caso não tenha ID
         $requestIdNEncon = $this->contatoService->update(["id" => ""]);
-        $this->assertTrue($requestIdNEncon->status() == 500);
+        $this->assertTrue($requestIdNEncon->statusCode == 500);
     }
 
     public function testContactDestroyReturnSuccess()
     {
         // Testando se o método destroy do service retorna sucesso
         $request = $this->contatoService->destroy($this->contato["id"]);
-        $this->assertTrue($request->status() == 200);
+        $this->assertTrue($request->statusCode == 200);
     }
 }
